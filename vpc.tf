@@ -1,6 +1,6 @@
 #Create VPC
 resource "aws_vpc" "cloudswitch360_project_vpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr
   instance_tenancy     = "default"
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -23,7 +23,7 @@ resource "aws_internet_gateway" "cloudswitch360_project_igw" {
 #Ensure naming the subnet to public_subnet-az1a to match the naming convention.
 resource "aws_subnet" "cloudswitch360_project_public_subnet-az1a" {
   vpc_id                  = aws_vpc.cloudswitch360_project_vpc.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = var.public_subnet-az1a_cidr
   availability_zone       = "us-east-2a" #change to your availability zone
   map_public_ip_on_launch = true
 
@@ -40,7 +40,7 @@ resource "aws_subnet" "cloudswitch360_project_public_subnet-az1a" {
 #Ensure naming the subnet to public_subnet-az1b to match the naming convention.
 resource "aws_subnet" "cloudswitch360_project_public_subnet-az1b" {
   vpc_id                  = aws_vpc.cloudswitch360_project_vpc.id
-  cidr_block              = "10.0.2.0/24"
+  cidr_block              = var.public_subnet-az1b_cidr
   availability_zone       = "us-east-2b" #change to your availability zone
   map_public_ip_on_launch = true
 
@@ -56,7 +56,7 @@ resource "aws_subnet" "cloudswitch360_project_public_subnet-az1b" {
 #Ensure naming the subnet to Private_app_subnet-az1a to match the naming convention.
 resource "aws_subnet" "cloudswitch360_project_private_app_subnet-az1a" {
   vpc_id                  = aws_vpc.cloudswitch360_project_vpc.id
-  cidr_block              = "10.0.3.0/24"
+  cidr_block              = var.private_app_subnet-az1a_cidr
   availability_zone       = "us-east-2a" #change to your availability zone
   map_public_ip_on_launch = false        #set to false for private subnet (private subnte should not have public IPs assigned to instances by Default.)
 
@@ -73,7 +73,7 @@ resource "aws_subnet" "cloudswitch360_project_private_app_subnet-az1a" {
 #Ensure naming the subnet to Private_app_subnet-az1b to match the naming convention.
 resource "aws_subnet" "cloudswitch360_project_private_app_subnet-az1b" {
   vpc_id                  = aws_vpc.cloudswitch360_project_vpc.id
-  cidr_block              = "10.0.4.0/24"
+  cidr_block              = var.private_app_subnet-az1b_cidr
   availability_zone       = "us-east-2b" #change to your availability zone
   map_public_ip_on_launch = false
 
@@ -90,7 +90,7 @@ resource "aws_subnet" "cloudswitch360_project_private_app_subnet-az1b" {
 #Ensure naming the subnet to Private_DB_subnet-az1a to match the naming convention.
 resource "aws_subnet" "cloudswitch360_project_private_db_subnet-az1a" {
   vpc_id                  = aws_vpc.cloudswitch360_project_vpc.id
-  cidr_block              = "10.0.5.0/24"
+  cidr_block              = var.private_db_subnet-az1a_cidr
   availability_zone       = "us-east-2a" #change to your availability zone
   map_public_ip_on_launch = false
 
@@ -107,7 +107,7 @@ resource "aws_subnet" "cloudswitch360_project_private_db_subnet-az1a" {
 #Ensure naming the subnet to Private_DB_subnet-az1b to match the naming convention.
 resource "aws_subnet" "cloudswitch360_project_private_db_subnet-az1b" {
   vpc_id                  = aws_vpc.cloudswitch360_project_vpc.id
-  cidr_block              = "10.0.6.0/24"
+  cidr_block              = var.private_db_subnet-az1b_cidr
   availability_zone       = "us-east-2b" #change to your availability zone
   map_public_ip_on_launch = false
 

@@ -7,16 +7,19 @@ resource "aws_instance" "cloudswitch360_jupiter_web" {
   associate_public_ip_address = true
   user_data                   = <<-EOF
     #!/bin/bash
-sudo su
-yum update -y
-yum install -y httpd
-cd /var/www/html
-wget https://github.com/bobo-commits/jupiter-zip-file.git
-unzip jupiter-main.zip
-cp -r jupiter-main/* /var/www/html
-rm -rf jupiter-main jupiter-main.zip
-systemctl start httpd
-systemctl enable httpd
-EOF
+    sudo su
+    yum update -y
+    yum install -y httpd
+    cd /var/www/html
+    wget https://github.com/Ahmednas211/jupiter-zip-file/raw/main/jupiter-main.zip
+    unzip jupiter-main.zip
+    cp -r jupiter-main/* /var/www/html
+    rm -rf jupiter-main jupiter-main.zip
+    systemctl start httpd
+    systemctl enable httpd
+  EOF
 
+  tags = {
+    Name = "Jupiter Web Server"
+  }
 }

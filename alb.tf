@@ -1,7 +1,7 @@
 # Create Application Load Balancer
 # This resource creates an Application Load Balancer (ALB) in AWS.
 resource "aws_lb" "cloudswitch360_project_alb" {
-  name               = "cloudswitch360_project_alb"
+  name               = "cloudswitch360-project-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_security_group.id]
@@ -17,7 +17,7 @@ resource "aws_lb" "cloudswitch360_project_alb" {
 
 # create target group
 resource "aws_lb_target_group" "cloudswitch360_project_app_target_group" {
-  name        = "cloudswitch360_project_app_target_group"
+  name        = "cloudswitch360-project-app-tg"
   port        = 80
   protocol    = "HTTP"
   target_type = "instance"

@@ -1,6 +1,6 @@
 # Create Application Load Balancer
 # This resource creates an Application Load Balancer (ALB) in AWS.
-resource "aws_lb" "cloudswitch360_project_alb" {
+resource "aws_lb" "application_load_balancer" {
   name               = "cloudswitch360-project-alb"
   internal           = false
   load_balancer_type = "application"
@@ -8,16 +8,16 @@ resource "aws_lb" "cloudswitch360_project_alb" {
 
   enable_deletion_protection = false
   subnet_mapping {
-    subnet_id = aws_subnet.cloudswitch360_project_public_subnet-az1a.id
+    subnet_id = "aws_subnet.cloudswitch360_project_public_subnet-az1a.id"
   }
   tags = {
-    Name = "cloudswitch360_project_alb"
+    Name = "application-load-balancer"
   }
 }
 
 # create target group
-resource "aws_lb_target_group" "cloudswitch360_project_app_target_group" {
-  name        = "cloudswitch360-project-app-tg"
+resource "aws_lb_target_group" "alb_target_group" {
+  name        = "cloudswitch360-jupiter-target-group"
   port        = 80
   protocol    = "HTTP"
   target_type = "instance"
@@ -30,21 +30,22 @@ resource "aws_lb_target_group" "cloudswitch360_project_app_target_group" {
     port                = "80"
     protocol            = "HTTP"
     timeout             = 5
-    healthy_threshold   = 2
+    healthy_threshold   = 5
     unhealthy_threshold = 2
-    matcher             = "200"
+    matcher             = "200,301,302"
   }
 }
 
 # Register the jupiter server with the target group
-resource "aws_lb_target_group_attachment" "jupiter_server" {
-  target_group_arn = aws_lb_target_group.cloudswitch360_project_app_target_group.arn
-  target_id        = aws_instance.jupiter_server.id
+resource "aws_lb_target_group_attachment" "jupiter_web_target_group_attachment" {
+  target_group_arn = aws_lb_target_group.alb_target_group.arn
+  target_id        = aws_instance.cloudswitch360_jupiter_web.id
+  port             = 80
 }
 
 #create a listener on port 80 with redirect action
 resource "aws_lb_listener" "cloudswitch360_project_alb_listener" {
-  load_balancer_arn = aws_lb.cloudswitch360_project_alb.arn
+  load_balancer_arn = aws_lb.application_load_balancer.arn
   port              = 80
   protocol          = "HTTP"
 
@@ -53,7 +54,7 @@ resource "aws_lb_listener" "cloudswitch360_project_alb_listener" {
     redirect {
       host        = "#{host}"
       path        = "/"
-      port        = "443"
+      port        = 443
       protocol    = "HTTPS"
       query       = "#{query}"
       status_code = "HTTP_301"
@@ -61,12 +62,18 @@ resource "aws_lb_listener" "cloudswitch360_project_alb_listener" {
   }
 }
 #create a listener on port 443 with forward action (HTTPS)
-resource "aws_lb_listener" "cloudswitch360_project_alb_https_listener" {
-  load_balancer_arn = aws_lb.cloudswitch360_project_alb.arn
+resource "aws_lb_listener" "alb_https_listener" {
+  # This resource creates a listener for the Application Load Balancer (ALB) on port 443 with HTTPS protocol.
+  # It uses the SSL certificate created in the acm.tf file for secure communication.
+  # The listener forwards traffic to the target group created in the previous step.
+  # The default action is to forward the traffic to the target group.
+  # The listener is associated with the ALB created in the previous step.
+  # The listener uses the SSL certificate created in the acm.tf file for secure communication.
+  load_balancer_arn = aws_lb.application_load_balancer.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.cloudswitch360_project_cert.arn
+  certificate_arn   = aws_acm_certificate.ssl.certificate.arn
 
   default_action {
     type             = "forward"

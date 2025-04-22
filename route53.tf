@@ -1,5 +1,5 @@
 # get hosted zone details
-data "aws_route53_zone" "hosted zone" {
+data "aws_route53_zone" "hosted_zone" {
   # This is the ID of the hosted zone you want to use
   # You can find this in the AWS console or use the aws cli to get it
   name = "bustercloud.com"
@@ -17,9 +17,9 @@ resource "aws_route53_record" "www" {
   alias {
     # This is the name of the record set you want to create
     # You can use any name you want, but it should be unique within the hosted zone
-    name                   = aws_cloudfront_distribution.bustercloud.domain_name
-    zone_id                = aws_cloudfront_distribution.bustercloud.hosted_zone_id
+    name                   = aws_lb.application_load_balancer.dns_name
+    zone_id                = aws_lb.application_load_balancer.zone_id
     evaluate_target_health = false
   }
 }
-  
+

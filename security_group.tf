@@ -3,7 +3,7 @@
 resource "aws_security_group" "alb_security_group" {
   name        = "alb_security_group"
   description = "enable http/https access on port 80/443"
-  vpc_id      = var.vpc_cidr
+  vpc_id      = aws_vpc.cloudswitch360_project_vpc.id
 
   ingress {
     description = "allow http acccess to the internet"

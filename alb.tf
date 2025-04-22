@@ -8,7 +8,10 @@ resource "aws_lb" "application_load_balancer" {
 
   enable_deletion_protection = false
   subnet_mapping {
-    subnet_id = "aws_subnet.cloudswitch360_project_public_subnet-az1a.id"
+    subnet_id = aws_subnet.cloudswitch360_project_public_subnet-az1a.id
+  }
+  subnet_mapping {
+    subnet_id = aws_subnet.cloudswitch360_project_public_subnet-az1b.id
   }
   tags = {
     Name = "application-load-balancer"
@@ -17,7 +20,7 @@ resource "aws_lb" "application_load_balancer" {
 
 # create target group
 resource "aws_lb_target_group" "alb_target_group" {
-  name        = "cloudswitch360-jupiter-target-group"
+  name        = "cloudswitch360-jupiter-tg"
   port        = 80
   protocol    = "HTTP"
   target_type = "instance"
@@ -73,10 +76,10 @@ resource "aws_lb_listener" "alb_https_listener" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.ssl.certificate.arn
+  certificate_arn   = aws_acm_certificate.ssl_certificate.arn
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.cloudswitch360_project_app_target_group.arn
+    target_group_arn = aws_lb_target_group.alb_target_group.arn
   }
 }

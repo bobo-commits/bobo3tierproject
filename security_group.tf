@@ -3,7 +3,7 @@
 resource "aws_security_group" "alb_security_group" {
   name        = "alb_security_group"
   description = "enable http/https access on port 80/443"
-  vpc_id      = aws_vpc.cloudswitch360_project_vpc.id
+  vpc_id      = aws_vpc.bustercloud_project_vpc.id
 
   ingress {
     description = "allow http acccess to the internet"
@@ -29,16 +29,16 @@ resource "aws_security_group" "alb_security_group" {
   }
 
   tags = {
-    Name = "cloudswitch360_project_alb_sg"
+    Name = "bustercloud_project_alb_sg"
   }
 }
 
 #create SG for the web server
 #terraform aws create SG
-resource "aws_security_group" "cloudswitch360_jupiter_web_sg" {
-  name        = "cloudswitch360_jupiter_web_sg"
+resource "aws_security_group" "bustercloud_jupiter_web_sg" {
+  name        = "bustercloud_jupiter_web_sg"
   description = "Allow internet access to the web server http port 80"
-  vpc_id      = aws_vpc.cloudswitch360_project_vpc.id
+  vpc_id      = aws_vpc.bustercloud_project_vpc.id
 
   ingress {
     description = "allow http acccess to the internet"
@@ -67,6 +67,6 @@ resource "aws_security_group" "cloudswitch360_jupiter_web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "cloudswitch360_jupiter_web_sg"
+    Name = "bustercloud_jupiter_web_sg"
   }
 }

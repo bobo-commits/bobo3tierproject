@@ -53,3 +53,9 @@ variable "domain_name" {
   default     = "bustercloud.com"
   description = "Domain name for the VPC"
 }
+
+variable "ec2_ami_id" {
+  type        = string
+  default     = "ami-04985531f48a27ae7"
+  description = "AMI ID for the EC2 instance"
+}

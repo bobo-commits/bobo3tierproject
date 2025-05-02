@@ -170,9 +170,24 @@ resource "aws_route_table_association" "public_subnet_association_az1b" {
   route_table_id = aws_route_table.bustercloud_public_rt.id
 }
 
-#create a Private Route Table for the private subents
+#create a Private Route Table for the private app subents
+#Ensure you name the route table to private_route_table-az1a to match the naming convention.
+resource "aws_route_table" "bustercloud_private_app_rt" {
+  vpc_id = aws_vpc.bustercloud_project_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.bustercloud_nat_gateway-az1a.id
+  }
+
+  tags = {
+    Name = "Route Table fpr Private Subnets"
+  }
+}
+
+#create a Private Route Table for the private DB subents
 #Ensure you name the route table to private_route_table-az1a to match thr naming convention.
-resource "aws_route_table" "bustercloud_private_rt" {
+resource "aws_route_table" "bustercloud_private_db_rt" {
   vpc_id = aws_vpc.bustercloud_project_vpc.id
 
   route {
@@ -188,22 +203,22 @@ resource "aws_route_table" "bustercloud_private_rt" {
 # associate the private route table with the private app subnets in AZ 1a.
 resource "aws_route_table_association" "private_app_subnet_association_az1a" {
   subnet_id      = aws_subnet.bustercloud_project_private_app_subnet-az1a.id
-  route_table_id = aws_route_table.bustercloud_private_rt.id
+  route_table_id = aws_route_table.bustercloud_private_app_rt.id
 }
 # associate the private route table with the private database subnets in AZ 1a
 resource "aws_route_table_association" "private_db_subnet_association_az1a" {
   subnet_id      = aws_subnet.bustercloud_project_private_db_subnet-az1a.id
-  route_table_id = aws_route_table.bustercloud_private_rt.id
+  route_table_id = aws_route_table.bustercloud_private_db_rt.id
 }
 
 # associate the private route table with the private app subnets in AZ 1b.
 resource "aws_route_table_association" "private_app_subnet_association_az1b" {
   subnet_id      = aws_subnet.bustercloud_project_private_app_subnet-az1b.id
-  route_table_id = aws_route_table.bustercloud_private_rt.id
+  route_table_id = aws_route_table.bustercloud_private_app_rt.id
 }
 
 # associate the private route table with the private database subnets in AZ 1b
 resource "aws_route_table_association" "private_db_subnet_association_az1b" {
   subnet_id      = aws_subnet.bustercloud_project_private_db_subnet-az1b.id
-  route_table_id = aws_route_table.bustercloud_private_rt.id
+  route_table_id = aws_route_table.bustercloud_private_db_rt.id
 } 

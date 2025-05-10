@@ -181,7 +181,7 @@ resource "aws_route_table" "bustercloud_private_app_rt" {
   }
 
   tags = {
-    Name = "Route Table fpr Private Subnets"
+    Name = "Route Table fpr Private app Subnets"
   }
 }
 
@@ -196,7 +196,7 @@ resource "aws_route_table" "bustercloud_private_db_rt" {
   }
 
   tags = {
-    Name = "Route Table fpr Private Subnets"
+    Name = "Route Table fpr Private db Subnets"
   }
 }
 

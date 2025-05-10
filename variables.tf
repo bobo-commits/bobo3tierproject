@@ -54,8 +54,23 @@ variable "domain_name" {
   description = "Domain name for the VPC"
 }
 
+#create a variable for ec2 instance AMI ID
 variable "ec2_ami_id" {
   type        = string
   default     = "ami-04985531f48a27ae7"
   description = "AMI ID for the EC2 instance"
+}
+
+#create a variable for the aws region
+variable "aws_region" {
+  description = "AWS region to deploy resources"
+  type        = string
+  default     = "" # Optional default
+}
+
+#create a variable for ec2 instance type
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
 }
